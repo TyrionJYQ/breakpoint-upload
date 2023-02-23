@@ -1,10 +1,14 @@
 <script setup>
 import {  ref } from 'vue';
+import  SparkMD5 from 'spark-md5'
 const fileupload = ref(null)
 let  fileChunkList = ref([])
 function onFileChange() {
   let file = fileupload.value.files[0]
   console.log(file)
+  getFileChunk(file).then(fileHash => {
+    uploadChunks(fileHash)
+  })
 }
 
 
@@ -86,9 +90,24 @@ const onUploadProgress = (item) => (e) => {
 <template>
  <div class="wrapper">
   <input type="file" ref="fileupload" @change="onFileChange">
+  <hr />
+  <ul>
+    <li v-for="item in fileChunkList">
+      <span>{{ item.name}} </span>
+      <span>{{ item.size}} </span>
+      <span></span>
+    </li>
+  </ul>
  </div>
 </template>
 
 <style scoped>
-
+ul {
+  li {
+    display: flex;
+    span {
+      flex:1
+    }
+  }
+}
 </style>
