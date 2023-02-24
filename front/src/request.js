@@ -1,28 +1,28 @@
 import axios from "axios";
 
-const baseURL = 'http://localhost:3001';
+const baseURL = "http://localhost:30001";
 
-export const uploadFile = (url, formData, onUploadProgress = () => { }) => {
+export const uploadFile = (url, formData, onUploadProgress = () => {}) => {
   return axios({
-    method: 'post',
+    method: "post",
     url,
     baseURL,
     headers: {
-      'Content-Type': 'multipart/form-data'
+      "Content-Type": "multipart/form-data",
     },
     data: formData,
-    onUploadProgress
+    onUploadProgress,
   });
-}
+};
 
 export const mergeChunks = (url, data) => {
   return axios({
-    method: 'post',
+    method: "post",
     url,
     baseURL,
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    data
+    data,
   });
-}
+};
