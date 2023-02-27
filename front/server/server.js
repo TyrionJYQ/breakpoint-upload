@@ -7,9 +7,22 @@ const { koaBody } = require("koa-body");
 const path = require("path");
 const fs = require("fs");
 const __dirname = path.resolve();
+const session = require("koa-session");
 
 const app = new Koa();
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
+app.use(
+  session(
+    {
+      sameSite: "none",
+    },
+    app
+  )
+);
 app.use(koaBody());
 const router = new Router();
 const outputPath = path.join(__dirname, "server/resources");
@@ -57,6 +70,22 @@ router.post(
   }
 );
 
+router.get("/fetch-test", async (ctx) => {
+  var exdate = new Date();
+  exdate.setTime(exdate.getTime() + 2 * 60 * 60 * 1000);
+  //   expires=${exdate.toUTCString()}
+  ctx.cookies.set("fetch-cookie", `gggggggggg; SameSite=None; Secure;`, {
+    httpOnly: true,
+  });
+
+  ctx.set("Access-Control-Allow-Credentials", true);
+
+  ctx.body = JSON.stringify({
+    code: 2000,
+    message: "cookie set success",
+  });
+});
+
 // 合并请求
 router.post("/mergeChunks", async (ctx) => {
   const { filename, size } = ctx.request.body;
@@ -73,6 +102,10 @@ router.post("/mergeChunks", async (ctx) => {
     },
     message: "merge chunks successful！",
   });
+});
+
+router.get("/", async (ctx) => {
+  ctx.body = "hello koa";
 });
 
 // 通过管道处理流

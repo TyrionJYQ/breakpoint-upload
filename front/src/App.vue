@@ -2,11 +2,24 @@
 import { ref, computed } from "vue";
 import SparkMD5 from "spark-md5";
 import { uploadFile, mergeChunks } from "./request";
+function fectchTest() {
+  fetch("http://localhost:30001/fetch-test", {
+    method: "GET",
+    credentials: "include",
+    // mode: "cors",
+  }).then(
+    (res) => {
+      console.log(res);
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+}
 const DefualtChunkSize = 1000000;
 const fileupload = ref(null);
 let fileChunkList = ref([]);
 const currFile = ref({});
-
 function onFileChange() {
   let file = fileupload.value.files[0];
   currFile.value = file;
@@ -110,6 +123,13 @@ const onUploadProgress = (item) => (e) => {
         </progress>
       </li>
     </ul>
+    <!-- fecth测试 -->
+    <div>
+      <button @click="fectchTest">fetch</button>
+    </div>
+    <div>
+      <a href="http://127.0.0.1:30001/">30001</a>
+    </div>
   </div>
 </template>
 
